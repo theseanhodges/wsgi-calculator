@@ -45,38 +45,42 @@ To submit your homework:
 def add(*args):
   """ Returns a STRING with the sum of the arguments """
 
-  # TODO: Fill sum with the correct value, based on the
-  # args provided.
-  sum = "0"
+  try:
+    result = int(args[0]) + int(args[1])
+  except ValueError:
+    raise NameError
 
-  return sum
+  return str(result)
 
 def subtract(*args):
-  """ Returns a STRING with the sum of the arguments """
+  """ Returns a STRING with the result of subtracting arg[1] from arg[0] """
 
-  # TODO: Fill sum with the correct value, based on the
-  # args provided.
-  sum = "0"
+  try:
+    result = int(args[0]) - int(args[1])
+  except ValueError:
+    raise NameError
 
-  return sum
+  return str(result)
 
 def multiply(*args):
-  """ Returns a STRING with the sum of the arguments """
+  """ Returns a STRING with the product of the arguments """
 
-  # TODO: Fill sum with the correct value, based on the
-  # args provided.
-  sum = "0"
+  try:
+    result = int(args[0]) * int(args[1])
+  except ValueError:
+    raise NameError
 
-  return sum
+  return str(result)
 
 def divide(*args):
-  """ Returns a STRING with the sum of the arguments """
+  """ Returns a STRING with the result of dividing arg[1] from arg[0] """
 
-  # TODO: Fill sum with the correct value, based on the
-  # args provided.
-  sum = "0"
+  try:
+    result = int(args[0]) / int(args[1])
+  except ValueError:
+    raise NameError
 
-  return sum
+  return str(result)
 
 def resolve_path(path):
     """
