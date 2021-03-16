@@ -41,6 +41,7 @@ To submit your homework:
 
 """
 
+host = ""
 
 def add(*args):
   """ Returns a STRING with the sum of the arguments """
@@ -82,6 +83,23 @@ def divide(*args):
 
   return str(result)
 
+def help():
+  """ Returns a guide to using the calculator """
+
+  return """<h1>WSGI Calculator</h1>
+This calculator performs the requested result on the arguments in the path:<br />
+<br />
+{}/<b>operation</b>/<b>number1</b>/<b>number2</b><br />
+<br />
+<b>operation</b> can be any of the following.  Click the operation for an example.
+<ul>
+<li /><a href="/add/23/42">add</a>
+<li /><a href="/subtract/23/42">subtract</a>
+<li /><a href="/multiply/3/5">multiply</a>
+<li /><a href="/divide/22/11">divide</a>
+</ul>
+""".format(host)
+
 def resolve_path(path):
     """
     Should return two values: a callable and an iterable of
@@ -89,6 +107,7 @@ def resolve_path(path):
     """
 
     handlers = {
+        '': help,
         'add': add,
         'subtract': subtract,
         'multiply': multiply,
@@ -103,7 +122,14 @@ def resolve_path(path):
     raise NotImplementedError
 
 def application(environ, start_response):
+    status = "200 OK"
     headers = [('Content-type', 'text/html')]
+
+    global host
+    host = "{}://{}".format(
+      environ.get('wsgi.url_scheme'),
+      environ.get('HTTP_HOST')
+    )
 
     try:
       path, args = resolve_path(environ.get('PATH_INFO'))
