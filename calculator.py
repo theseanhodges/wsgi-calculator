@@ -43,15 +43,40 @@ To submit your homework:
 
 
 def add(*args):
-    """ Returns a STRING with the sum of the arguments """
+  """ Returns a STRING with the sum of the arguments """
 
-    # TODO: Fill sum with the correct value, based on the
-    # args provided.
-    sum = "0"
+  # TODO: Fill sum with the correct value, based on the
+  # args provided.
+  sum = "0"
 
-    return sum
+  return sum
 
-# TODO: Add functions for handling more arithmetic operations.
+def subtract(*args):
+  """ Returns a STRING with the sum of the arguments """
+
+  # TODO: Fill sum with the correct value, based on the
+  # args provided.
+  sum = "0"
+
+  return sum
+
+def multiply(*args):
+  """ Returns a STRING with the sum of the arguments """
+
+  # TODO: Fill sum with the correct value, based on the
+  # args provided.
+  sum = "0"
+
+  return sum
+
+def divide(*args):
+  """ Returns a STRING with the sum of the arguments """
+
+  # TODO: Fill sum with the correct value, based on the
+  # args provided.
+  sum = "0"
+
+  return sum
 
 def resolve_path(path):
     """
@@ -59,26 +84,39 @@ def resolve_path(path):
     arguments.
     """
 
-    # TODO: Provide correct values for func and args. The
-    # examples provide the correct *syntax*, but you should
-    # determine the actual values of func and args using the
-    # path.
-    func = add
-    args = ['25', '32']
+    handlers = {
+        'add': add,
+        'subtract': subtract,
+        'multiply': multiply,
+        'divide': divide
+    }
 
-    return func, args
+    path = path.strip('/').split('/')
+    try:
+        return handlers[path[0]], path[1:]
+    except KeyError:
+        raise NameError
+    raise NotImplementedError
 
 def application(environ, start_response):
-    # TODO: Your application code from the book database
-    # work here as well! Remember that your application must
-    # invoke start_response(status, headers) and also return
-    # the body of the response in BYTE encoding.
-    #
-    # TODO (bonus): Add error handling for a user attempting
-    # to divide by zero.
-    pass
+    headers = [('Content-type', 'text/html')]
+
+    try:
+      path, args = resolve_path(environ.get('PATH_INFO'))
+      status = "200 OK"
+      body = path(*args)
+    except NameError:
+      status = "404 Not Found"
+      body = "<h1>404 Not Found</h1>"
+    except Exception:
+      status = "500 Internal Server Error"
+      body = "<h1>500 Internal Server Error</h1>"
+    start_response(status, headers)
+
+    return [body.encode('utf8')]
+
 
 if __name__ == '__main__':
-    # TODO: Insert the same boilerplate wsgiref simple
-    # server creation that you used in the book database.
-    pass
+    from wsgiref.simple_server import make_server
+    srv = make_server('localhost', 8080, application)
+    srv.serve_forever()
